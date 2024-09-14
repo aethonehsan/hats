@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Http\Request;
 use App\Models\SiteAdmin;
+use App\Models\User;
+use Stancl\Tenancy\Facades\Tenancy;
 
 class SiteAdminController extends Controller
 {
@@ -68,12 +70,41 @@ class SiteAdminController extends Controller
     public function update(Request $request, string $id)
     {
 
-      $user=SiteAdmin::find($id);
-      $user->name=$request->name;
-      $user->email=$request->email;
-      $user->password=Hash::make($request->password);
-      $user->status=$request->status;
-      $user->save();
+      $siteadmin=SiteAdmin::find($id);
+
+      //find old email to use in site user table
+      $oldemail=$siteadmin->email;
+
+      $siteadmin->name=$request->name;
+      $siteadmin->email=$request->email;
+      $siteadmin->password=Hash::make($request->password);
+      $siteadmin->status=$request->status;
+      $siteadmin->save();
+
+      //update in site
+      $site=$siteadmin->site;
+        dd($site);
+      Tenancy::find($site->id)?->run(function () use ($site, $oldemail): void {
+
+        // Find the user by email
+        $user = User::where('email', $oldemail)->first();
+
+        // Check if the user exists before updating
+        if ($user) {
+            $user->name = $site->siteadmin->name;
+            $user->email = $site->siteadmin->email;
+            $user->password = $site->siteadmin->password;
+
+            // Save the updated user
+            $user->save();
+        }
+
+    });
+
+
+
+
+    // Debugging: Check the tenantoldemail value
 
       return redirect()->route('superadmins.index')->with('success', 'User Updated successfully!');
     }

@@ -18,6 +18,6 @@ class SiteAdmin extends Model
     ];
     public function site()
 {
-    return $this->hasOne(Site::class);
+    return $this->hasOne(Site::class,'siteadmin_id');
 }
 }

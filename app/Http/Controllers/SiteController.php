@@ -46,7 +46,7 @@ class SiteController extends Controller
 
         // Associate the SiteAdmin with the Site
 
-             $site->siteadmin()->associate($siteadmin);
+        $site->siteadmin()->associate($siteadmin);
 
 
 
@@ -77,8 +77,9 @@ class SiteController extends Controller
      */
     public function edit(string $id)
     {
+        $siteadmins=SiteAdmin::all();
         $site=Site::find($id);
-        return view('sites.edit', compact('site'));
+        return view('sites.edit', compact('site','siteadmins'));
     }
 
     /**
@@ -86,61 +87,53 @@ class SiteController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        $site = Site::find($id);
-        if (!$site) {
-            return redirect()->route('tenants.index')->with('error', 'Tenant not found.');
-        }
 
-        $tenantoldemail = $site->email;
+        $site = Site::Find($id);
+        $oldemail=$site->siteadmin->email;
+        $site->name = $request->input('name');
+        $site->location = $request->input('location');
+        $site->status = $request->input('status');
 
-        // Only update the name if it's provided and not blank
-        if ($request->filled('name')) {
-            $site->name = $request->input('name');
-        }
-        if ($request->filled('status')) {
-            $site->status = $request->input('status');
-        }
+        // Find the corresponding SiteAdmin
+        $siteadmin = SiteAdmin::find($request->input('siteadmin'));
 
-        // Only update the domain_name if it's provided and not blank
-        if ($request->filled('domain_name')) {
-            $site->domain_name = $request->input('domain_name');
-            // Also update the domain in the related domains table
-            $site->domains()->update([
-                'domain' => $site->domain_name . "." . config('app.domain')
-            ]);
-        }
+        // Associate the SiteAdmin with the Site
 
-        // Only update the email if it's provided and not blank
-        if ($request->filled('email')) {
-            $site->email = $request->input('email');
-        }
+        $site->siteadmin()->associate($siteadmin);
 
-        // Only update the password if it's provided and not blank
-        if ($request->filled('password')) {
-            $site->password = bcrypt($request->input('password'));
-        }
 
-        // Save the tenant with the updated fields
+
+        // Save the Site
         $site->save();
 
-        // Debugging: Check the tenantoldemail value
+       $site->domains()->update([
+            'domain' => $request->input('name').".".config('app.domain'),
+            'site_id'=>$site->id,
+        ]);
+
+//to update credential in Site User Table
+
+Tenancy::find($site->id)?->run(function () use ($site, $oldemail): void {
+
+    // Find the user by email
+    $user = User::where('email', $oldemail)->first();
+
+    // Check if the user exists before updating
+    if ($user) {
+        $user->name = $site->siteadmin->name;
+        $user->email = $site->siteadmin->email;
+        $user->password = $site->siteadmin->password;
+
+        // Save the updated user
+        $user->save();
+    }
+
+});
+return redirect()->route('sites.index');
 
 
-        Tenancy::find($site->id)?->run(function () use ($request, $tenantoldemail) {
-            // Debugging: Check if tenant context is correctly set
 
 
-            $user = User::where('email', $tenantoldemail)->first();
-            if ($user) {
-                $user->update([
-                    'name' => $request->name,
-                    'email' => $request->email,
-                    'password' => bcrypt($request->input('password')),
-                ]);
-            }
-        });
-
-        return redirect()->route('tenants.index')->with('success', 'Tenant updated successfully.');
     }
 
 

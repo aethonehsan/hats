@@ -36,6 +36,6 @@ class Site extends BaseTenant implements TenantWithDatabase
 
 public function siteadmin()
 {
-    return $this->belongsTo(SiteAdmin::class );
+    return $this->belongsTo(SiteAdmin::class ,'siteadmin_id');
 }
 }
