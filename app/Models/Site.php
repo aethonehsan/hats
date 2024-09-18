@@ -16,19 +16,17 @@ class Site extends BaseTenant implements TenantWithDatabase
     public static function getCustomColumns(): array
 {
     return [
-        'id',
-        'name',
-        'domain_name',
-        'email',
-        'password',
-        'status',
+    'id',
+    'name',
+    'location',
+    'status',
+    'siteadmin_id'
     ];
 }
+protected $fillable = ['name', 'location', 'status', 'siteadmin_id']; // Ensure 'data' is NOT in this list
 
-    public function setPasswordAttribute($value){
-        $this->attributes['password'] = bcrypt($value);
 
-    }
+
     public function domains()
 {
     return $this->hasMany(Domain::class);

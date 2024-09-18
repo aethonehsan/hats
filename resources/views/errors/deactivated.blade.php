@@ -10,10 +10,9 @@
             data-speed="1" />
           <div class="container">
             <div class="hero-text-box text-center position-relative">
-              <h1 class="text-primary hero-title display-6 fw-extrabold mb-3">
-              Welcome to {{ $tenant->name }}
+              <h1 class="text-primary hero-title display-6 fw-extrabold">
+                Site has been Deactivated!
               </h1>
-              <a href="/login" class="btn btn-light">Login</a>
 
 
           </div>

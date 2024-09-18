@@ -30,9 +30,9 @@ foreach (config('tenancy.central_domains') as $domain) {
             Route::resource('superadmins', SuperAdminController::class);
             Route::resource('siteadmins', SiteAdminController::class);
 
-            //Tenant Dashboard
 
-            Route::get('/tenantsdashbaord', [TenantDashboardController::class, 'index']);
+
+
 
         });
 

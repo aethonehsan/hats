@@ -17,6 +17,7 @@ return new class extends Migration
             $table->string('email')->unique();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password')->nullable();
+            $table->boolean('status')->default(true); // true = active, false = disabled //phpmyadi  store 1 for true and 0 for false
             $table->rememberToken();
             $table->timestamps();
         });

@@ -131,14 +131,14 @@
       <div class="layout-container">
         <!-- Menu -->
 
-        @include('layouts.partials.sidebar')
+        @include('app.layouts.partials.sidebar')
         <!-- / Menu -->
 
         <!-- Layout container -->
         <div class="layout-page">
           <!-- Navbar -->
           <div class="container">
-          @include('layouts.partials.header')
+          @include('app.layouts.partials.header')
             </div>
 
           <!-- / Navbar -->
@@ -157,7 +157,7 @@
             <!-- / Content -->
 
             <!-- Footer -->
-            @include('layouts.partials.footer')
+            @include('app.layouts.partials.footer')
             <!-- / Footer -->
 
             <div class="content-backdrop fade"></div>

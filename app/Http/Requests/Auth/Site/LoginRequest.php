@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Requests\Auth;
+namespace App\Http\Requests\Auth\Site;
 
 use Illuminate\Auth\Events\Lockout;
 use Illuminate\Foundation\Http\FormRequest;
@@ -41,6 +41,9 @@ class LoginRequest extends FormRequest
     {
         $this->ensureIsNotRateLimited();
 
+
+
+
         $user = \App\Models\SuperAdmin::where('email', $this->email)->first();
 
         if (!$user || $user->status === 0) {
@@ -48,6 +51,7 @@ class LoginRequest extends FormRequest
                 'email' => __('Your account is inactive. Please contact support.'),
             ]);
         }
+
 
         if (! Auth::attempt($this->only('email', 'password'), $this->filled('remember'))) {
             throw ValidationException::withMessages([

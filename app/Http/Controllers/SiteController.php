@@ -1,14 +1,12 @@
 <?php
 
 namespace App\Http\Controllers;
-use Validator;
+
 use Illuminate\Http\Request;
 use App\Models\Site;
-use Stancl\Tenancy\Facades\Tenancy;
 use App\Models\SiteAdmin;
 use App\Models\User;
-
-
+use Stancl\Tenancy\Facades\Tenancy;
 
 class SiteController extends Controller
 {
@@ -17,7 +15,7 @@ class SiteController extends Controller
      */
     public function index()
     {
-        $sites=Site::all();
+        $sites = Site::all();
         return view('sites.index', compact('sites'));
     }
 
@@ -26,7 +24,7 @@ class SiteController extends Controller
      */
     public function create()
     {
-        $siteadmins=SiteAdmin::all();
+        $siteadmins = SiteAdmin::all();
         return view('sites.create', compact('siteadmins'));
     }
 
@@ -35,33 +33,32 @@ class SiteController extends Controller
      */
     public function store(Request $request)
     {
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'location' => 'required|string|max:255',
+
+
+        ]);
 
         $site = new Site();
         $site->name = $request->input('name');
         $site->location = $request->input('location');
         $site->status = $request->input('status');
 
-        // Find the corresponding SiteAdmin
+        // Find and associate the SiteAdmin
         $siteadmin = SiteAdmin::find($request->input('siteadmin'));
-
-        // Associate the SiteAdmin with the Site
-
         $site->siteadmin()->associate($siteadmin);
-
-
 
         // Save the Site
         $site->save();
 
-
-
-
-
+        // Create a domain associated with the site
         $site->domains()->create([
-            'domain' => $request->input('name').".".config('app.domain'),
-            'site_id'=>$site->id,
+            'domain' => $request->input('name') . "." . config('app.domain'),
+            'site_id' => $site->id,
         ]);
-        return redirect(route('sites.index'))->with('success', 'Site created successfully!');
+
+        return redirect()->route('sites.index')->with('success', 'Site created successfully!');
     }
 
     /**
@@ -69,7 +66,7 @@ class SiteController extends Controller
      */
     public function show(string $id)
     {
-        //
+        // Implement if needed
     }
 
     /**
@@ -77,9 +74,9 @@ class SiteController extends Controller
      */
     public function edit(string $id)
     {
-        $siteadmins=SiteAdmin::all();
-        $site=Site::find($id);
-        return view('sites.edit', compact('site','siteadmins'));
+        $siteadmins = SiteAdmin::all();
+        $site = Site::findOrFail($id);
+        return view('sites.edit', compact('site', 'siteadmins'));
     }
 
     /**
@@ -87,66 +84,80 @@ class SiteController extends Controller
      */
     public function update(Request $request, string $id)
     {
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'location' => 'required|string|max:255',
 
-        $site = Site::Find($id);
-        $oldemail=$site->siteadmin->email;
+            'siteadmin' => 'required|',
+        ]);
+
+        $site = Site::findOrFail($id);
+        if ($site->siteadmin) {
+            $oldSiteAdminId = $site->siteadmin->id;
+        }
+
+
         $site->name = $request->input('name');
         $site->location = $request->input('location');
         $site->status = $request->input('status');
 
-        // Find the corresponding SiteAdmin
+        // Find and associate the new SiteAdmin
         $siteadmin = SiteAdmin::find($request->input('siteadmin'));
-
-        // Associate the SiteAdmin with the Site
-
         $site->siteadmin()->associate($siteadmin);
-
-
 
         // Save the Site
         $site->save();
 
-       $site->domains()->update([
-            'domain' => $request->input('name').".".config('app.domain'),
-            'site_id'=>$site->id,
+        // Update the domain associated with the site
+        $site->domains()->update([
+            'domain' => $request->input('name') . "." . config('app.domain'),
+            'site_id' => $site->id,
         ]);
 
-//to update credential in Site User Table
+        // Update credentials in Site User Table
+        if (isset($oldSiteAdminId) && $oldSiteAdminId){
 
-Tenancy::find($site->id)?->run(function () use ($site, $oldemail): void {
+            if($oldSiteAdminId){
+                $siteadmin = SiteAdmin::findOrFail($oldSiteAdminId);
+                $useremail = $siteadmin->email;
 
-    // Find the user by email
-    $user = User::where('email', $oldemail)->first();
+                Tenancy::find($site->id)?->run(function () use ($site, $useremail): void {
+                    $targetUser = User::where('email', $useremail)->first();
 
-    // Check if the user exists before updating
-    if ($user) {
-        $user->name = $site->siteadmin->name;
-        $user->email = $site->siteadmin->email;
-        $user->password = $site->siteadmin->password;
 
-        // Save the updated user
-        $user->save();
+                    if ($targetUser) {
+                        $targetUser->name = $site->siteadmin->name;
+                        $targetUser->email = $site->siteadmin->email;
+                        $targetUser->status = $site->siteadmin->status;
+                        $targetUser->password =$site->siteadmin->password;
+                        $targetUser->save();
+                        $targetUser->assignRole('Admin');
+                    }
+                    else{
+                    $user= new User();
+                    $user->name = $site->siteadmin->name;
+                    $user->email = $site->siteadmin->email;
+                    $user->status = $site->siteadmin->status;
+                    $user->password = $site->siteadmin->password;
+                    $user->save();
+                    $user->assignRole('Admin');
+                    }
+                });
+
+            }
+
+
+        }
+
+        return redirect()->route('sites.index');
     }
-
-});
-return redirect()->route('sites.index');
-
-
-
-
-    }
-
-
 
     /**
      * Remove the specified resource from storage.
      */
     public function destroy(string $id)
-
     {
         Site::destroy($id);
-
-
         return redirect()->route('sites.index');
 
     }

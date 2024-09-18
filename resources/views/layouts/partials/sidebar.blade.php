@@ -38,44 +38,65 @@
 
           <div class="menu-inner-shadow"></div>
 
-          <ul class="menu-inner py-1">
+          <ul id="ulmenu" class="menu-inner py-1">
             <!-- Page -->
-            <li class="menu-item active">
+            <li class="menu-item ">
               <a href="{{ route('dashboard') }}" class="menu-link">
                 <i class="menu-icon tf-icons ti ti-smart-home"></i>
                 <div data-i18n="Dashboard">Home</div>
               </a>
             </li>
-            <li class="menu-item">
+            <li class="menu-item ">
               <a href="{{ route('superadmins.index') }}" class="menu-link">
                 <i class="menu-icon tf-icons ti ti-smart-home"></i>
-                <div data-i18n="Super Admins">Super Admins</div>
+                <div >Super Admins</div>
               </a>
             </li>
 
             <li class="menu-item">
               <a href="{{ route('siteadmins.index') }}" class="menu-link">
                 <i class="menu-icon tf-icons ti ti-smart-home"></i>
-                <div data-i18n="Super Admins">Site Admins</div>
+                <div >Site Admins</div>
               </a>
             </li>
             <li class="menu-item">
               <a href="{{ route('sites.index') }}" class="menu-link">
                 <i class="menu-icon tf-icons ti ti-smart-home"></i>
-                <div data-i18n="Super Admins">Sites</div>
+                <div >Sites</div>
               </a>
             </li>
             <li class="menu-item">
               <a href="{{ route('profile.edit') }}" class="menu-link">
                 <i class="menu-icon tf-icons ti ti-smart-home"></i>
-                <div data-i18n="Super Admins">Profile ({{Auth()->user()->name}})</div>
+                <div >Profile ({{Auth()->user()->name}})</div>
               </a>
             </li>
             <li class="menu-item p-5">
                 <form method="POST" action="{{route('logout')}}">
                 @csrf
-                <button type="submit"  data-i18n="Super Admins">Logout</button>
+                <button type="submit"  >Logout</button>
                 </form>
             </li>
           </ul>
+          <script>
+            //code active for desktop menu
+document.addEventListener('DOMContentLoaded', function() {
+    const menuItems = document.querySelectorAll('#ulmenu li a');
+  //  const contactbtn=document.getElementById("contactbtn");
+    let path=window.location.pathname;
+    path='http://localhost'+path;
+    console.log(path);
+    menuItems.forEach(item => {
+        console.log(item.getAttribute("href"))
+        if(item.getAttribute("href")===path ){
+            console.log('1st');
+            item.style.backgroundColor = "#8F85F3";
+            item.style.color = "#ffffff";
+        }
+
+    });
+
+});
+
+          </script>
         </aside>
