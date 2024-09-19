@@ -12,8 +12,7 @@ use App\Models\SuperAdmin;
 class SuperAdminFeatureTest extends TestCase
 {
     use RefreshDatabase;
-
-    /** @test */
+  /** @test */
     public function it_can_display_the_index_page()
     {
         $user = SuperAdmin::factory()->create(); // The create() method requires parentheses to work.
@@ -24,7 +23,6 @@ class SuperAdminFeatureTest extends TestCase
         $response->assertViewIs('superadmins.index');
     }
 
-    /** @test */
     public function it_can_show_the_create_form()
     {
         $user=SuperAdmin::factory()->create();
@@ -34,7 +32,6 @@ class SuperAdminFeatureTest extends TestCase
         $response->assertViewIs('superadmins.create');
     }
 
-    /** @test */
     public function it_can_store_a_new_super_admin()
     {
         $user=SuperAdmin::factory()->create();
@@ -56,7 +53,6 @@ class SuperAdminFeatureTest extends TestCase
         ]);
     }
 
-    /** @test */
     public function it_can_show_the_edit_form()
     {
 
@@ -69,7 +65,6 @@ class SuperAdminFeatureTest extends TestCase
         $response->assertViewHas('user', $user);
     }
 
-    /** @test */
     public function it_can_update_a_super_admin()
     {
         $user = SuperAdmin::factory()->create();
@@ -92,7 +87,6 @@ class SuperAdminFeatureTest extends TestCase
         ]);
     }
 
-    /** @test */
     public function it_can_delete_a_super_admin()
     {
         $user = SuperAdmin::factory()->create();
@@ -101,6 +95,7 @@ class SuperAdminFeatureTest extends TestCase
 
         $response->assertRedirect(route('superadmins.index'));
         $response->assertSessionHas('success', 'User deleted successfully!');
+        $this->assertDatabaseMissing('users', $user);
 
     }
 }

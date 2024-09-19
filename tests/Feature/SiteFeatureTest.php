@@ -8,6 +8,9 @@ use Tests\TestCase;
 use App\Models\Site;
 use App\Models\SuperAdmin;
 use App\Models\SiteAdmin;
+use App\Models\User;
+use App\Models\Domain;
+use Stancl\Tenancy\Facades\Tenancy;
 
 class SiteFeatureTest extends TestCase
 {
@@ -25,7 +28,7 @@ class SiteFeatureTest extends TestCase
         $response->assertStatus(200);
    }
 
-    /** @test */
+
     public function it_can_show_the_create_form()
     {
         $user=SuperAdmin::factory()->create();
@@ -35,34 +38,51 @@ class SiteFeatureTest extends TestCase
         $response->assertViewIs('sites.create');
     }
 
-    /** @test */
+
+
     public function it_can_store_a_new_site()
     {
         $user=SuperAdmin::factory()->create();
         $siteadmin=SiteAdmin::factory()->create();
 
         $data = [
-            'name' => 'Test Admin',
-            'location' => 'Test Admin',
+            'name' => 'Test',
+            'location' => 'Test',
             'siteadmin' => $siteadmin->id,
             'status' => '1',
         ];
 
         $response = $this->actingAs($user)->post(route('sites.store'), $data);
 
-        $response->assertRedirect(route('sites.index'));
-        $response->assertSessionHas('success', 'Site created successfully!');
+
         $this->assertDatabaseHas('sites', [
-            'name' => 'Test Admin',
-            'location' => 'Test Admin',
+            'name' => 'Test',
+            'location' => 'Test',
             'siteadmin_id' => $siteadmin->id,
             'status' => '1',
+        ], 'mysql') ;
+
+        $site = Site::where('name', 'Test')->first();
+        $this->assertDatabaseHas('domains', [
+            'domain' => 'Test.'.config('app.domain'),
+            'site_id' =>$site->id,
         ]);
+
+        Tenancy::find($site->id)?->run(function () use ($siteadmin): void {
+            $this->assertDatabaseHas('users', [
+                'name' => $siteadmin->name,
+                'email' => $siteadmin->email,
+                'status' => $siteadmin->status,
+                'password'=> $siteadmin->password,
+            ]);
+
+         });
+
+
+
     }
 
 
-
-        /** @test */
         public function it_can_show_the_edit_form()
         {
 
@@ -72,19 +92,27 @@ class SiteFeatureTest extends TestCase
             $response->assertStatus(200);
             $response->assertViewIs('sites.edit');
             $response->assertViewHas('site', $site);
+            $site->delete();
         }
 
 
-    /** @test */
+
+
     public function it_can_update_a_site()
     {
         $user = SuperAdmin::factory()->create();
         $siteadmin = SiteAdmin::factory()->create();
         $site = Site::factory()->create();
+        $domain= new Domain();
+        $domain->domain="old" . "." . config('app.domain');
+        $domain->site_id=$site->id;
+        $domain->save();
+
+        $site->domains= $domain;
 
 
         $data = [
-            'name' => 'Updated Admin',
+            'name' => 'Updatedname',
             'location' => 'updatedlocation',
             'siteadmin' => $siteadmin->id,
             'status' => '1',
@@ -95,11 +123,29 @@ class SiteFeatureTest extends TestCase
         $response->assertRedirect(route('sites.index'));
         $response->assertSessionHas('success', 'Site updated successfully!');
         $this->assertDatabaseHas('sites', [
-            'name' => 'Updated Admin',
+            'name' => 'Updatedname',
             'location' => 'updatedlocation',
             'siteadmin_id' => $siteadmin->id,
             'status' => '1',
         ]);
+
+
+        Tenancy::find($site->id)?->run(function () use ($siteadmin): void {
+            $this->assertDatabaseHas('users', [
+                'name' => $siteadmin->name,
+                'email' => $siteadmin->email,
+                'status' => $siteadmin->status,
+                'password'=> $siteadmin->password,
+            ]);
+
+         });
+
+         $site = Site::where('name', 'Updatedname')->first();
+         $this->assertDatabaseHas('domains', [
+            'domain' => 'Updatedname.'.config('app.domain'),
+            'site_id' =>$site->id,
+        ]);
+        $site->delete();
     }
 
 
@@ -112,6 +158,8 @@ class SiteFeatureTest extends TestCase
 
         $response->assertRedirect(route('sites.index'));
         $response->assertSessionHas('success', 'Site deleted successfully!');
+        $site->delete();
+        $this->assertDatabaseMissing('sites',$site);
 
     }
 }

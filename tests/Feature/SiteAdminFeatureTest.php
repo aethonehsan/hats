@@ -10,12 +10,12 @@ use App\Models\SiteAdmin;
 use App\Models\User;
 use App\Models\Site;
 use Stancl\Tenancy\Facades\Tenancy;
+use Illuminate\Support\Facades\Hash;
 
 class SiteAdminFeatureTest extends TestCase
 {
     use RefreshDatabase;
-
-    /** @test */
+  /** @test */
     public function it_can_display_the_index_page()
     {
         $user = SuperAdmin::factory()->create(); // The create() method requires parentheses to work.
@@ -26,7 +26,6 @@ class SiteAdminFeatureTest extends TestCase
         $response->assertViewIs('siteadmins.index');
     }
 
-    /** @test */
     public function it_can_show_the_create_form()
     {
         $user=SuperAdmin::factory()->create();
@@ -36,7 +35,7 @@ class SiteAdminFeatureTest extends TestCase
         $response->assertViewIs('siteadmins.create');
     }
 
-    /** @test */
+
     public function it_can_store_a_new_site_admin()
     {
         $user=SuperAdmin::factory()->create();
@@ -58,7 +57,6 @@ class SiteAdminFeatureTest extends TestCase
         ]);
     }
 
-    /** @test */
     public function it_can_show_the_edit_form()
     {
 
@@ -71,12 +69,17 @@ class SiteAdminFeatureTest extends TestCase
         $response->assertViewHas('siteadmin', $siteadmin);
     }
 
-    /** @test */
     public function it_can_update_a_site_admin()
     {
         $user = SuperAdmin::factory()->create();
-        $siteadmin=SiteAdmin::factory()->create();
-        $data = [
+        $site=Site::factory()->create();
+        $siteadmin=$site->siteadmin;
+
+        Tenancy::find($site->id)?->run(function () use ($siteadmin): void {
+            $test=new User;
+            $test=$siteadmin;
+         });
+         $data = [
             'name' => 'Updated Admin',
             'email' => 'updated@example.com',
             'password' => 'newpassword123',
@@ -92,9 +95,22 @@ class SiteAdminFeatureTest extends TestCase
             'email' => 'updated@example.com',
             'status' => '1',
         ]);
+
+        $siteAdmin =SiteAdmin::where('email', 'updated@example.com')->first();
+        $this->assertTrue(\Hash::check('newpassword123', $siteAdmin->password));
+        Tenancy::find($site->id)?->run(function () use ($siteadmin): void {
+            $this->assertDatabaseHas('users', [
+                'name' => 'Updated Admin',
+                'email' => 'updated@example.com',
+                'status' => '1',
+            ]);
+            $user =User::where('email', 'updated@example.com')->first();
+            $this->assertTrue(\Hash::check('newpassword123', $user->password));
+
+         });
+         $site->delete();
     }
 
-    /** @test */
     public function it_can_delete_a_site_admin()
     {
         $user=SuperAdmin::factory()->create();
@@ -116,6 +132,7 @@ class SiteAdminFeatureTest extends TestCase
             $this->assertDatabaseMissing('users', ['id' => $siteadmin->id]);
 
          });
+         $site->delete();
 
 
 

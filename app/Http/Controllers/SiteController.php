@@ -19,18 +19,13 @@ class SiteController extends Controller
         return view('sites.index', compact('sites'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
     public function create()
     {
         $siteadmins = SiteAdmin::all();
         return view('sites.create', compact('siteadmins'));
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
+
     public function store(Request $request)
     {
         $request->validate([
@@ -59,17 +54,11 @@ class SiteController extends Controller
         return redirect()->route('sites.index')->with('success', 'Site created successfully!');
     }
 
-    /**
-     * Display the specified resource.
-     */
     public function show(string $id)
     {
         // Implement if needed
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
     public function edit(string $id)
     {
         $siteadmins = SiteAdmin::all();
@@ -77,9 +66,22 @@ class SiteController extends Controller
         return view('sites.edit', compact('site', 'siteadmins'));
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     public function update(Request $request, string $id)
     {
         $request->validate([
@@ -106,7 +108,7 @@ class SiteController extends Controller
         // Save the Site
         $site->save();
 
-        // Update the domain associated with the site
+
         $site->domains()->update([
             'domain' => $request->input('name') . "." . config('app.domain'),
             'site_id' => $site->id,
@@ -150,9 +152,18 @@ class SiteController extends Controller
 
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
+
+
+
+
+
+
+
+
+
+
+
+
     public function destroy(string $id)
     {
         Site::destroy($id);

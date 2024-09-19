@@ -29,7 +29,7 @@ class SuperAdminController extends Controller
         // Validate request
         $request->validate([
             'name' => 'required|string|max:255',
-            'email' => 'required|email|unique:users,email',
+            'email' => 'required|email|unique',
             'password' => 'required|string|min:8',
         ]);
 
