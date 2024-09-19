@@ -32,7 +32,7 @@
               <div class="landing-hero-btn d-inline-block position-relative">
 
                 @foreach ($tenants as $t)
-                    <a href= "http://{{$t->name}}.{{env('APP_DOMAIN' ,'localhost')}}" class="btn btn-primary btn-lg " >{{$t->name}}</a>
+                    <a href= "http://{{$t->name}}.{{env('APP_DOMAIN' ,'localhost')}}" class="btn btn-primary btn-lg m-2" >{{$t->name}}</a>
                 @endforeach
               </div>
             </div>

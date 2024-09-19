@@ -74,7 +74,7 @@ class SuperAdminController extends Controller
       $user->status=$request->status;
       $user->save();
 
-      return redirect()->route('superadmins.index')->with('success', 'User Updated successfully!');
+      return redirect()->route('superadmins.index')->with('success', 'User updated successfully!');
     }
 
     /**
@@ -84,7 +84,7 @@ class SuperAdminController extends Controller
     {
         $user = SuperAdmin::destroy($id);
 
-        return redirect()->route('superadmins.index')->with('success', 'User forcefully deleted successfully');
+        return redirect()->route('superadmins.index')->with('success', 'User deleted successfully!');
     }
 
 

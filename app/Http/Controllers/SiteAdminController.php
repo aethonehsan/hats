@@ -60,8 +60,8 @@ class SiteAdminController extends Controller
      */
     public function edit(string $id)
     {
-        $user = SiteAdmin::findOrFail($id);
-        return view('siteadmins.edit', compact('user'));
+        $siteadmin = SiteAdmin::findOrFail($id);
+        return view('siteadmins.edit', compact('siteadmin'));
     }
 
     /**
@@ -120,5 +120,6 @@ class SiteAdminController extends Controller
     }
         SiteAdmin::destroy($id);
         return redirect()->route('siteadmins.index')->with('success', 'User deleted successfully!');
+
     }
 }

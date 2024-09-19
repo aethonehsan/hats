@@ -9,14 +9,16 @@ use Illuminate\Support\Facades\Session;
 use Tests\TestCase;
 use App\Models\SuperAdmin;
 
-class SuperAdminControllerTest extends TestCase
+class SuperAdminFeatureTest extends TestCase
 {
     use RefreshDatabase;
 
     /** @test */
     public function it_can_display_the_index_page()
     {
-        $response = $this->get(route('superadmins.index'));
+        $user = SuperAdmin::factory()->create(); // The create() method requires parentheses to work.
+        $response = $this->actingAs($user)->get(route('superadmins.index')); // actingAs() should be called before making the request.
+
 
         $response->assertStatus(200);
         $response->assertViewIs('superadmins.index');
@@ -25,7 +27,8 @@ class SuperAdminControllerTest extends TestCase
     /** @test */
     public function it_can_show_the_create_form()
     {
-        $response = $this->get(route('superadmins.create'));
+        $user=SuperAdmin::factory()->create();
+        $response = $this->actingAs($user)->get(route(name: 'superadmins.create'));
 
         $response->assertStatus(200);
         $response->assertViewIs('superadmins.create');
@@ -34,30 +37,32 @@ class SuperAdminControllerTest extends TestCase
     /** @test */
     public function it_can_store_a_new_super_admin()
     {
+        $user=SuperAdmin::factory()->create();
         $data = [
             'name' => 'Test Admin',
             'email' => 'test@example.com',
             'password' => 'password123',
-            'status' => 'active',
+            'status' => '1',
         ];
 
-        $response = $this->post(route('superadmins.store'), $data);
+        $response = $this->actingAs($user)->post(route('superadmins.store'), $data);
 
         $response->assertRedirect(route('superadmins.index'));
         $response->assertSessionHas('success', 'User created successfully!');
-        $this->assertDatabaseHas('super_admins', [
+        $this->assertDatabaseHas('users', [
             'name' => 'Test Admin',
             'email' => 'test@example.com',
-            'status' => 'active',
+            'status' => '1',
         ]);
     }
 
     /** @test */
     public function it_can_show_the_edit_form()
     {
+
         $user = SuperAdmin::factory()->create();
 
-        $response = $this->get(route('superadmins.edit', $user->id));
+        $response = $this->actingAs($user)->get(route('superadmins.edit', $user->id));
 
         $response->assertStatus(200);
         $response->assertViewIs('superadmins.edit');
@@ -73,17 +78,17 @@ class SuperAdminControllerTest extends TestCase
             'name' => 'Updated Admin',
             'email' => 'updated@example.com',
             'password' => 'newpassword123',
-            'status' => 'inactive',
+            'status' => '1',
         ];
 
-        $response = $this->put(route('superadmins.update', $user->id), $data);
+        $response = $this->actingAs($user)->put(route('superadmins.update', $user->id), $data);
 
         $response->assertRedirect(route('superadmins.index'));
-        $response->assertSessionHas('success', 'User Updated successfully!');
-        $this->assertDatabaseHas('super_admins', [
+        $response->assertSessionHas('success', 'User updated successfully!');
+        $this->assertDatabaseHas('users', [
             'name' => 'Updated Admin',
             'email' => 'updated@example.com',
-            'status' => 'inactive',
+            'status' => '1',
         ]);
     }
 
@@ -92,10 +97,10 @@ class SuperAdminControllerTest extends TestCase
     {
         $user = SuperAdmin::factory()->create();
 
-        $response = $this->delete(route('superadmins.destroy', $user->id));
+        $response = $this->actingAs($user)->delete(route('superadmins.destroy', $user->id));
 
         $response->assertRedirect(route('superadmins.index'));
-        $response->assertSessionHas('success', 'User forcefully deleted successfully');
+        $response->assertSessionHas('success', 'User deleted successfully!');
 
     }
 }

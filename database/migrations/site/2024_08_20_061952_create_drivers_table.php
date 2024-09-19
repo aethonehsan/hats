@@ -19,8 +19,8 @@ return new class extends Migration
             $table->string('phone_no')->nullable();
             $table->string('lisence_no')->nullable();
             $table->string('vehicle_type')->nullable();
-            $table->unsignedBigInteger('runcategory_id')->nullable();
-            $table->foreign('runcategory_id')->references('id')->on('runcategories');
+            $table->unsignedBigInteger('department_id')->nullable();
+            $table->foreign('department_id')->references('id')->on('departments');
             $table->rememberToken();
             $table->timestamps();
         });

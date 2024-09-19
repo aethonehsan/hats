@@ -14,8 +14,8 @@ return new class extends Migration
         Schema::create('jobs', function (Blueprint $table) {
             $table->id();
             $table->string('name')->nullable();
-            $table->unsignedBigInteger('runcategory_id')->nullable();
-            $table->foreign('runcategory_id')->references('id')->on('runcategories')->onDelete('cascade')->onUpdate('cascade');
+            $table->unsignedBigInteger('department_id')->nullable();
+            $table->foreign('department_id')->references('id')->on('departments')->onDelete('cascade')->onUpdate('cascade');
             $table->string('destination')->nullable();
             $table->integer('price')->nullable();
             $table->string('status')->nullable();

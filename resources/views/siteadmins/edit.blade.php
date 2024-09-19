@@ -15,22 +15,22 @@
     @endif
 
     <!-- Edit form -->
-    <form action="{{ route('siteadmins.update', $user->id) }}" method="POST">
+    <form action="{{ route('siteadmins.update', $siteadmin->id) }}" method="POST">
         @csrf
         @method('PUT') <!-- Use PUT method for updating the user -->
 
         <div class="form-group mb-3">
             <label for="name">Name</label>
-            <input type="text" class="form-control" id="name" name="name" value="{{ old('name', $user->name) }}" required>
+            <input type="text" class="form-control" id="name" name="name" value="{{ old('name', $siteadmin->name) }}" required>
         </div>
 
         <div class="form-group mb-3">
             <label for="email">Email</label>
-            <input type="email" class="form-control" id="email" name="email" value="{{ old('email', $user->email) }}" required>
+            <input type="email" class="form-control" id="email" name="email" value="{{ old('email', $siteadmin->email) }}" required>
         </div>
         <div class="form-group mb-3">
             <label for="password">Password</label>
-            <input type="password" class="form-control" id="email" name="password" value="{{ old('email', $user->email) }}" required>
+            <input type="password" class="form-control" id="email" name="password" value="{{ old('email', $siteadmin->email) }}" required>
         </div>
         <div class="form-group mb-3">
             <label for="password">status</label>

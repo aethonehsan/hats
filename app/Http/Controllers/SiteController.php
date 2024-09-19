@@ -36,8 +36,6 @@ class SiteController extends Controller
         $request->validate([
             'name' => 'required|string|max:255',
             'location' => 'required|string|max:255',
-
-
         ]);
 
         $site = new Site();
@@ -148,8 +146,8 @@ class SiteController extends Controller
 
 
         }
+        return redirect()->route('sites.index')->with('success', 'Site updated successfully!');
 
-        return redirect()->route('sites.index');
     }
 
     /**
@@ -158,7 +156,7 @@ class SiteController extends Controller
     public function destroy(string $id)
     {
         Site::destroy($id);
-        return redirect()->route('sites.index');
+        return redirect()->route('sites.index')->with('success', 'Site deleted successfully!');
 
     }
 }
