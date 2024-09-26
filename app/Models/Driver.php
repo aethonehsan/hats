@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Models;
-
+use App\Models\RunCategory;
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -48,15 +48,15 @@ class Driver extends Authenticatable
 
      protected function casts(): array
     {
-        
+
         return [
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
         ];
     }
 
-    public function runcategory()  
-    {  
-        return $this->belongsTo(RunCategory::class);  
-    }  
+    public function runcategory()
+    {
+        return $this->belongsTo(RunCategory::class);
+    }
 }

@@ -7,9 +7,10 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
 use App\Models\SiteAdmin;
-use App\Models\User;
-use App\Models\Site;
 use Stancl\Tenancy\Facades\Tenancy;
+use App\Models\Site\User;
+use App\Models\Site;
+
 use Illuminate\Support\Facades\Hash;
 
 class SiteAdminFeatureTest extends TestCase
@@ -25,7 +26,7 @@ class SiteAdminFeatureTest extends TestCase
         $response->assertStatus(200);
         $response->assertViewIs('siteadmins.index');
     }
-
+ /** @test */
     public function it_can_show_the_create_form()
     {
         $user=SuperAdmin::factory()->create();
@@ -35,7 +36,7 @@ class SiteAdminFeatureTest extends TestCase
         $response->assertViewIs('siteadmins.create');
     }
 
-
+ /** @test */
     public function it_can_store_a_new_site_admin()
     {
         $user=SuperAdmin::factory()->create();
@@ -56,7 +57,7 @@ class SiteAdminFeatureTest extends TestCase
             'status' => '1',
         ]);
     }
-
+ /** @test */
     public function it_can_show_the_edit_form()
     {
 
@@ -68,7 +69,7 @@ class SiteAdminFeatureTest extends TestCase
         $response->assertViewIs('siteadmins.edit');
         $response->assertViewHas('siteadmin', $siteadmin);
     }
-
+ /** @test */
     public function it_can_update_a_site_admin()
     {
         $user = SuperAdmin::factory()->create();
@@ -110,7 +111,7 @@ class SiteAdminFeatureTest extends TestCase
          });
          $site->delete();
     }
-
+ /** @test */
     public function it_can_delete_a_site_admin()
     {
         $user=SuperAdmin::factory()->create();
@@ -138,6 +139,32 @@ class SiteAdminFeatureTest extends TestCase
 
 
 
+
+    }
+
+
+
+    public function test_siteadmin_with_status_zero_cannot_login()
+    {
+
+        $site=Site::factory()->create();
+        $siteadmin=$site->siteadmin;
+        Tenancy::find($site->id)?->run(function () use ($siteadmin): void {
+            $user = User::factory()->create(['status' => 0, 'password' => bcrypt('password')]);
+
+            // Attempt to log in with the created user's credentials
+            $data=[
+                'email' => $user->email,
+                'password' => 'password',
+            ];
+            $response = $this->post('/login', $data);
+
+            // Assert that the user is not authenticated
+            $this->assertGuest();
+
+            // Assert that a redirection or error message occurs
+            $response->assertSessionHasErrors('email');
+         });
 
     }
 }

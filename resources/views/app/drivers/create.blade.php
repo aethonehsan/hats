@@ -38,8 +38,8 @@
                     <div class="mb-3">
                         <label for="run_category" class="form-label">Run Category</label>
                         <select name="run_category">
-                            @foreach ($runcategories as $runcategory)
-                            <option value="{{$runcategory->name}}"> {{$runcategory->name}} </option>
+                            @foreach ($departments as $department)
+                            <option value="{{$department->name}}"> {{$department->name}} </option>
                             @endforeach
                         </select>
                     </div>

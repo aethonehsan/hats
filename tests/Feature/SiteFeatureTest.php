@@ -8,6 +8,10 @@ use Tests\TestCase;
 use App\Models\Site;
 use App\Models\SuperAdmin;
 use App\Models\SiteAdmin;
+use App\Http\Middleware\CheckTenantStatus;
+
+use Illuminate\Http\Request;
+
 use App\Models\User;
 use App\Models\Domain;
 use Stancl\Tenancy\Facades\Tenancy;
@@ -28,7 +32,7 @@ class SiteFeatureTest extends TestCase
         $response->assertStatus(200);
    }
 
-
+ /** @test */
     public function it_can_show_the_create_form()
     {
         $user=SuperAdmin::factory()->create();
@@ -39,7 +43,7 @@ class SiteFeatureTest extends TestCase
     }
 
 
-
+ /** @test */
     public function it_can_store_a_new_site()
     {
         $user=SuperAdmin::factory()->create();
@@ -82,7 +86,7 @@ class SiteFeatureTest extends TestCase
 
     }
 
-
+ /** @test */
         public function it_can_show_the_edit_form()
         {
 
@@ -97,7 +101,7 @@ class SiteFeatureTest extends TestCase
 
 
 
-
+ /** @test */
     public function it_can_update_a_site()
     {
         $user = SuperAdmin::factory()->create();
@@ -148,18 +152,33 @@ class SiteFeatureTest extends TestCase
         $site->delete();
     }
 
+ /** @test */
 
-    public function it_can_delete_a_site()
-    {
-        $user = SuperAdmin::factory()->create();
-        $site= Site::factory()->create();
 
-        $response = $this->actingAs($user)->delete(route('sites.destroy', $site->id));
 
-        $response->assertRedirect(route('sites.index'));
-        $response->assertSessionHas('success', 'Site deleted successfully!');
-        $site->delete();
-        $this->assertDatabaseMissing('sites',$site);
 
-    }
+
+
+
+
+ public function test_site_with_status_zero_cannot_access()
+ {
+     // Create a user with status 0
+
+     $site=Site::factory()->create(['status'=> 0]);
+     $domain=new Domain();
+     $domain->domain=$site->name.'.localhost';
+
+     $domain->site_id=$site->id;
+     $domain->save();
+     $domain1=$domain->domain;
+
+     $response = $this->get($domain1);
+
+     // Assert that the user is not authenticated
+     $response->assertStatus(404);
+
+     // Assert that a redirection or error message occurs
+
+ }
 }

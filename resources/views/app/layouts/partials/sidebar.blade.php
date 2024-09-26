@@ -1,8 +1,8 @@
 <aside id="layout-menu" class="layout-menu menu-vertical menu bg-menu-theme">
           <div class="app-brand demo">
-            <a href="index.html" class="app-brand-link">
-              <span class="app-brand-logo demo">
-                <img src="{{asset('logo.gif')}}" width="200px">
+            <a href="/dashboard" class="app-brand-link">
+              <span class="">
+                <img src="{{asset('../logo.png')}}" width="80px" height="100%">
                   <path
                     fill-rule="evenodd"
                     clip-rule="evenodd"
@@ -36,98 +36,100 @@
             </a>
           </div>
 
-          <div class="menu-inner-shadow"></div>
+          @php
 
-          <ul id="ulmenu" class="menu-inner py-1">
+$tenant = tenant();
+
+@endphp
+<script>
+  //code active for desktop menu
+document.addEventListener('DOMContentLoaded', function() {
+const tenant = {!! json_encode($tenant) !!};
+
+const menuItems = document.querySelectorAll('#ulmenu li a');
+
+let path=window.location.pathname;
+
+path=`http://${tenant.name}.localhost`+path;
+menuItems.forEach(item => {
+
+if(item.getAttribute("href")===path ){
+
+  item.style.backgroundColor = "#00846F";
+  item.style.color = "#ffffff";
+}
+
+});
+
+});
+
+</script>
+          <div class="menu-inner-shadow " style="background:linear-gradient(90deg, rgba(2,0,36,1) 0%, rgba(0,31,69,1) 23%, rgba(0,132,111,1) 100%)"></div>
+
+          <ul id="ulmenu" class="menu-inner py-1" style="background:linear-gradient(90deg, rgba(2,0,36,1) 0%, rgba(0,31,69,1) 23%, rgba(0,132,111,1) 100%)">
             <!-- Page -->
             <li class="menu-item ">
-              <a href="{{ route('dashboard') }}" class="menu-link">
+              <a href="{{ route('app.dashboard') }}" class="menu-link" style="color:white">
                 <i class="menu-icon tf-icons ti ti-smart-home"></i>
                 <div >Home</div>
               </a>
             </li>
             <li class="menu-item ">
-              <a href="{{ route('siteadmins.index') }}" class="menu-link">
+              <a href="{{ route('siteadmins.index') }}" class="menu-link"style="color:white">
                 <i class="menu-icon tf-icons ti ti-smart-home"></i>
                 <div >Admins</div>
               </a>
             </li>
 
             <li class="menu-item">
-              <a href="{{ route('departments.index') }}" class="menu-link">
+              <a href="{{ route('departments.index') }}" class="menu-link"style="color:white">
                 <i class="menu-icon tf-icons ti ti-smart-home"></i>
                 <div >Departments</div>
               </a>
             </li>
             <li class="menu-item">
-              <a href="{{ route('drivers.index') }}" class="menu-link">
+              <a href="{{ route('drivers.index') }}" class="menu-link"style="color:white">
                 <i class="menu-icon tf-icons ti ti-smart-home"></i>
                 <div >Drivers</div>
               </a>
             </li>
             <li class="menu-item">
-              <a href="{{ route('baselocations.index') }}" class="menu-link">
+              <a href="{{ route('baselocations.index') }}" class="menu-link"style="color:white">
                 <i class="menu-icon tf-icons ti ti-smart-home"></i>
                 <div >Base Locations</div>
               </a>
             </li>
             <li class="menu-item">
-              <a href="{{ route('jobs.index') }}" class="menu-link">
+              <a href="{{ route('jobs.index') }}" class="menu-link"style="color:white">
                 <i class="menu-icon tf-icons ti ti-smart-home"></i>
                 <div >Jobs</div>
               </a>
             </li>
             <li class="menu-item">
-              <a href="{{ route('notifications.index') }}" class="menu-link">
+              <a href="{{ route('notifications.index') }}" class="menu-link"style="color:white">
                 <i class="menu-icon tf-icons ti ti-smart-home"></i>
                 <div >Notifications</div>
               </a>
             </li>
             <li class="menu-item">
-              <a href="{{ route('sites.index') }}" class="menu-link">
+              <a href="{{ route('sites.index') }}" class="menu-link"style="color:white">
                 <i class="menu-icon tf-icons ti ti-smart-home"></i>
                 <div >Invoicing</div>
               </a>
             </li>
             <li class="menu-item">
-              <a href="{{ route('bids.index') }}" class="menu-link">
+              <a href="{{ route('bids.index') }}" class="menu-link"style="color:white">
                 <i class="menu-icon tf-icons ti ti-smart-home"></i>
                 <div >Bidding</div>
               </a>
             </li>
 
-            <li class="menu-item">
-              <a href="{{ route('profile.edit') }}" class="menu-link">
-                <i class="menu-icon tf-icons ti ti-smart-home"></i>
-                <div >Profile ({{Auth()->user()->name}})</div>
-              </a>
-            </li>
-            <li class="menu-item p-5">
-                <form method="POST" action="{{route('logout')}}">
-                @csrf
-                <button type="submit"  >Logout</button>
-                </form>
-            </li>
           </ul>
-          <script>
-            //code active for desktop menu
-document.addEventListener('DOMContentLoaded', function() {
-    const menuItems = document.querySelectorAll('#ulmenu li a');
-  //  const contactbtn=document.getElementById("contactbtn");
-    let path=window.location.pathname;
-    path='http://localhost'+path;
-    console.log(path);
-    menuItems.forEach(item => {
-        console.log(item.getAttribute("href"))
-        if(item.getAttribute("href")===path ){
-            console.log('1st');
-            item.style.backgroundColor = "#8F85F3";
-            item.style.color = "#ffffff";
-        }
 
-    });
-
-});
-
-          </script>
         </aside>
+
+
+
+
+
+

@@ -45,10 +45,7 @@ Route::middleware([
 ])->group(function () {
     // Start tenant routes
 
-    Route::get('/', function () {
-        $tenant = tenant(); // Fetch the current tenant
-        return view('app.welcome', compact('tenant'));
-    });
+    Route::redirect('/', '/login');
 
     // Resource routes for users, roles, permissions
     Route::middleware('auth')->group(function () {

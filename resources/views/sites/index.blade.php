@@ -1,4 +1,5 @@
 @extends('layouts.app')
+@section('title', 'Site')
 @section('content')
 
     <div >
@@ -45,7 +46,7 @@
                     </tbody>
                 </table>
 
-                <a href="{{ route('sites.create') }}" class="btn btn-primary">Create Sites</a>
+                <a href="{{ route('sites.create') }}" class="btn btn-primary custombtn">Create Sites</a>
             </div>
         </div>
     </div>

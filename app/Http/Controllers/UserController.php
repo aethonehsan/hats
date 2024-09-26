@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Http\Request;
-use App\Models\User;
+use App\Models\Site\User;
 use App\Models\Role;
 
 class UserController extends Controller
@@ -34,7 +34,7 @@ class UserController extends Controller
             'email' => 'required|email|unique:users,email',
             'password' => 'required|string|min:8',
         ]);
-        
+
         // Create user
         $user=User::create([
             'name' => $request->input('name'),

@@ -1,4 +1,5 @@
 @extends('layouts.app')
+@section('title', 'Site Admin')
 @section('content')
 <div class="py-12">
     <div class="container">
@@ -33,7 +34,7 @@
         </div>
 
                     <!-- Submit Button -->
-                    <button type="submit" class="btn btn-primary">Add User</button>
+                    <button type="submit" class="btn btn-primary custombtn">Add User</button>
                 </form>
                 @if ($errors->any())
     <div class="alert alert-danger">

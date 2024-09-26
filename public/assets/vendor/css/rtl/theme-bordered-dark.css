@@ -21,6 +21,9 @@
 .bg-menu-theme.menu-vertical .menu-sub > .menu-item > .menu-link:before {
   left: 1.1rem;
 }
+.template-customizer-open-btn{
+    display: hidden!important;
+    }
 [dir=rtl] .bg-menu-theme.menu-vertical .menu-sub > .menu-item > .menu-link:before {
   right: 1.1rem;
   left: inherit;

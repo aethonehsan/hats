@@ -4,6 +4,7 @@ namespace Database\Factories;
 
 use App\Models\Site;
 use App\Models\SiteAdmin;
+use App\Models\Domain;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 class SiteFactory extends Factory

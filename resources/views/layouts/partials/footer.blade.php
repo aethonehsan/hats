@@ -2,21 +2,14 @@
               <div class="container-xxl">
                 <div
                   class="footer-container d-flex align-items-center justify-content-between py-4 flex-md-row flex-column">
-                  <div class="text-body">
+                  <div class="text-body text-center">
                     ©
                     <script>
                       document.write(new Date().getFullYear());
                     </script>
-                    , made with ❤️ by <a href="https://pixinvent.com" target="_blank" class="footer-link">Pixinvent</a>
+                    , Developed with ❤️ by <a href="https://aethon.digital" target="_blank" class="" style="color:#00826E;">Aethon INT</a>
                   </div>
-                  <div class="d-none d-lg-inline-block">
-                    <a
-                      href="https://demos.pixinvent.com/vuexy-html-admin-template/documentation/"
-                      target="_blank"
-                      class="footer-link me-4"
-                      >Documentation</a
-                    >
-                  </div>
+
                 </div>
               </div>
             </footer>

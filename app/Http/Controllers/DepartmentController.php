@@ -12,9 +12,9 @@ class DepartmentController extends Controller
 
     public function index()
     {
-        $runcategories=Department::all();
+        $departments=Department::all();
 
-        return view('app.runcategories.index', compact('runcategories'));
+        return view('app.departments.index', compact('departments'));
     }
 
     /**
@@ -22,9 +22,9 @@ class DepartmentController extends Controller
      */
     public function create()
     {
-        $runcategories=Department::all();
+        $departments=Department::all();
 
-        return view('app.runcategories.create', compact('runcategories'));
+        return view('app.departments.create', compact('departments'));
     }
 
     public function store(Request $request)
@@ -48,7 +48,7 @@ class DepartmentController extends Controller
         ]);
 
         // Redirect with success message
-        return redirect()->route('runcategories.index')->with('success', 'User created successfully!');
+        return redirect()->route('departments.index')->with('success', 'User created successfully!');
     }
 
 
@@ -63,8 +63,8 @@ class DepartmentController extends Controller
 
     public function edit(string $id)
     {
-        $runcategory=Department::find($id);
-        return view('app.runcategories.edit', compact('runcategory'));
+        $department=Department::find($id);
+        return view('app.departments.edit', compact('department'));
     }
 
     /**
@@ -72,13 +72,13 @@ class DepartmentController extends Controller
      */
     public function update(Request $request, string $id)
     {
-      $runcategory=Department::find($id);
-      $runcategory->update(array_filter($request->only(['name', 'detail', 'additional_details', 'price']), function ($value) {
+      $department=Department::find($id);
+      $department->update(array_filter($request->only(['name', 'detail', 'additional_details', 'price']), function ($value) {
         return !is_null($value) && $value !== '';
     }));
 
 
-      return redirect()->route('runcategories.index');
+      return redirect()->route('departments.index');
     }
 
     /**
@@ -87,7 +87,7 @@ class DepartmentController extends Controller
     public function destroy(string $id)
     {
         Department::destroy($id);
-        return redirect()->route('runcategories.index');
+        return redirect()->route('departments.index');
 
     }
 }

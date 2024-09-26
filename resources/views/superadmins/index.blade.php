@@ -1,19 +1,7 @@
 @extends('layouts.app')
-
+@section('title', 'SuperAdmin')
 @section('content')
 
-    <!-- <div class="container-xxl  container-p-y">
-                        <h1 class="h2">Super Admins</h1>
-                        <div class="btn-toolbar mb-2 mb-md-0">
-                            <div class="btn-group me-2">
-                                <button type="button" class="btn btn-sm btn-outline-secondary">Share</button>
-                                <button type="button" class="btn btn-sm btn-outline-secondary">Export</button>
-                            </div>
-                            <button type="button" class="btn btn-sm btn-outline-secondary dropdown-toggle">
-                                <i class="bi bi-calendar-fill"></i> This week
-                            </button>
-                        </div>
-                    </div> -->
     <div class="container-xxl flex-grow-1 container-p-y">
         <div >
             <div class="bg-white border rounded-3 shadow-sm p-4">
@@ -61,7 +49,7 @@
         </ul>
     </div>
 @endif
-                <a href="{{route('superadmins.create')}}" class="btn btn-primary mt-3">Create</a>
+                <a href="{{route('superadmins.create')}}" class="btn btn-primary mt-3 custombtn" >Create</a>
             </div>
         </div>
     </div>

@@ -9,7 +9,7 @@
         </p>
     </header>
 
-    <button 
+    <button
         class="btn btn-danger mb-3"
         data-bs-toggle="modal"
         data-bs-target="#confirmUserDeletionModal"

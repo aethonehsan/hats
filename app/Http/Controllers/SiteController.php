@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Site;
 use App\Models\SiteAdmin;
-use App\Models\User;
+use App\Models\Site\User;
 use Stancl\Tenancy\Facades\Tenancy;
 
 class SiteController extends Controller

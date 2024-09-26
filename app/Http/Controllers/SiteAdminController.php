@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Http\Request;
 use App\Models\SiteAdmin;
-use App\Models\User;
+use App\Models\Site\User;
 use App\Models\Site;
 use Stancl\Tenancy\Facades\Tenancy;
 

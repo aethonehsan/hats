@@ -5,9 +5,9 @@
     <div class="container">
         <div class="bg-white border rounded-3 shadow-sm">
             <div class="p-4">
-                <form method="POST" action="{{ route('runcategories.store') }}">
+                <form method="POST" action="{{ route('baselocations.store') }}">
                     @csrf
-                    <!-- User Name -->
+
                     <div class="mb-3">
                         <label for="name" class="form-label">Name</label>
                         <input type="text" class="form-control" id="userName" name="name" placeholder="Enter name" />
@@ -28,9 +28,7 @@
                         <input type="text" class="form-control" id="userName" name="price" placeholder="Enter Price" />
                     </div>
 
-
-                    <!-- Submit Button -->
-                    <button type="submit" class="btn btn-primary">Add Run Category</button>
+                    <button type="submit" class="btn btn-primary">Add Base Location</button>
                 </form>
             </div>
         </div>

@@ -8,6 +8,8 @@ use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Session;
 use Tests\TestCase;
 use App\Models\SuperAdmin;
+use Illuminate\Validation\ValidationException;
+
 
 class SuperAdminFeatureTest extends TestCase
 {
@@ -22,7 +24,7 @@ class SuperAdminFeatureTest extends TestCase
         $response->assertStatus(200);
         $response->assertViewIs('superadmins.index');
     }
-
+ /** @test */
     public function it_can_show_the_create_form()
     {
         $user=SuperAdmin::factory()->create();
@@ -31,7 +33,7 @@ class SuperAdminFeatureTest extends TestCase
         $response->assertStatus(200);
         $response->assertViewIs('superadmins.create');
     }
-
+ /** @test */
     public function it_can_store_a_new_super_admin()
     {
         $user=SuperAdmin::factory()->create();
@@ -52,7 +54,7 @@ class SuperAdminFeatureTest extends TestCase
             'status' => '1',
         ]);
     }
-
+ /** @test */
     public function it_can_show_the_edit_form()
     {
 
@@ -64,7 +66,7 @@ class SuperAdminFeatureTest extends TestCase
         $response->assertViewIs('superadmins.edit');
         $response->assertViewHas('user', $user);
     }
-
+ /** @test */
     public function it_can_update_a_super_admin()
     {
         $user = SuperAdmin::factory()->create();
@@ -86,7 +88,7 @@ class SuperAdminFeatureTest extends TestCase
             'status' => '1',
         ]);
     }
-
+ /** @test */
     public function it_can_delete_a_super_admin()
     {
         $user = SuperAdmin::factory()->create();
@@ -95,7 +97,27 @@ class SuperAdminFeatureTest extends TestCase
 
         $response->assertRedirect(route('superadmins.index'));
         $response->assertSessionHas('success', 'User deleted successfully!');
-        $this->assertDatabaseMissing('users', $user);
+        $this->assertDatabaseMissing('users', ['id'=>$user]);
 
     }
+ /** @test */
+ public function test_user_with_status_zero_cannot_login()
+    {
+        // Create a user with status 0
+        $user = SuperAdmin::factory()->create(['status' => 0, 'password' => bcrypt('password')]);
+
+        // Attempt to log in with the created user's credentials
+        $data=[
+            'email' => $user->email,
+            'password' => 'password',
+        ];
+        $response = $this->post('/login', $data);
+
+        // Assert that the user is not authenticated
+        $this->assertGuest();
+
+        // Assert that a redirection or error message occurs
+        $response->assertSessionHasErrors('email');
+    }
+
 }

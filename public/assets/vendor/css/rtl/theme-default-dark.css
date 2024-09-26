@@ -25,6 +25,9 @@
   right: 1.1rem;
   left: inherit;
 }
+.template-customizer-open-btn{
+    display: hidden!important;
+    }
 .bg-menu-theme.menu-vertical .menu-sub > .menu-item .menu-link .menu-icon {
   display: none;
 }

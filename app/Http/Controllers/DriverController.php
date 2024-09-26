@@ -4,8 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\Driver;
 use Illuminate\Support\Facades\Hash;
-use App\Models\User;
-use App\Models\RunCategory;
+use App\Models\Site\User;
+use App\Models\Department;
 
 
 use Illuminate\Http\Request;
@@ -27,8 +27,8 @@ class DriverController extends Controller
      */
     public function create()
     {
-        $runcategories=RunCategory::all();
-        return view('app.drivers.create', compact('runcategories'));
+        $departments=Department::all();
+        return view('app.drivers.create', compact('departments'));
     }
 
     /**
@@ -36,7 +36,7 @@ class DriverController extends Controller
      */
     public function store(Request $request)
     {
- 
+
         Driver::Create(
             [
 
@@ -72,9 +72,9 @@ class DriverController extends Controller
     public function edit(string $id)
     {
         $driver=Driver::find($id);
-        $runcategories=RunCategory::all();
+        $departments=Department::all();
         $drivers=Driver::all();
-        return view ('app.drivers.edit', compact('drivers', 'runcategories', 'driver'));
+        return view ('app.drivers.edit', compact('drivers', 'departments', 'driver'));
     }
 
     /**
@@ -86,7 +86,7 @@ class DriverController extends Controller
         $driver = Driver::find($id);
 
         $driveremail = $driver->email;
-    
+
         // Update driver details
 
         $driver->update(array_filter($request->only([
@@ -100,7 +100,7 @@ class DriverController extends Controller
           return !is_null($value) && $value !== '';
       }));
 
-    
+
         // Update the user details
         if ($request->filled('email')) {
             // Find the user associated with the driver
@@ -109,21 +109,21 @@ class DriverController extends Controller
                 // Update user details
                 $user->name = $request->input('name', $user->name);
                 $user->email = $request->input('email', $user->email);
-                
+
                 // Update password if provided
                 if ($request->filled('password')) {
                     $user->password = Hash::make($request->input('password'));
                 }
-    
+
                 $user->save();
             } else {
                 return redirect()->back()->with('error', 'User not found.');
             }
         }
-    
+
         return redirect()->route('drivers.index')->with('success', 'Driver and user updated successfully.');
     }
-    
+
 
     /**
      * Remove the specified resource from storage.
@@ -132,7 +132,7 @@ class DriverController extends Controller
     {
 
         $driver=Driver::find($id);
-       
+
         $driveremail=$driver->email;
         $user=User::where('email', $driveremail)->first();
         $user->delete();

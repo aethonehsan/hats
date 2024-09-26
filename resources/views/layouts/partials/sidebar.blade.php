@@ -1,8 +1,8 @@
 <aside id="layout-menu" class="layout-menu menu-vertical menu bg-menu-theme">
           <div class="app-brand demo">
-            <a href="index.html" class="app-brand-link">
-              <span class="app-brand-logo demo">
-                <img src="{{asset('logo.gif')}}" width="200px">
+            <a href="/dashboard" class="app-brand-link">
+              <span class="">
+                <img src="{{asset('logo.png')}}" width="80px" height="100%">
                   <path
                     fill-rule="evenodd"
                     clip-rule="evenodd"
@@ -36,67 +36,68 @@
             </a>
           </div>
 
-          <div class="menu-inner-shadow"></div>
+          <div class="menu-inner-shadow " style="background:linear-gradient(90deg, rgba(2,0,36,1) 0%, rgba(0,31,69,1) 23%, rgba(0,132,111,1) 100%)"></div>
 
-          <ul id="ulmenu" class="menu-inner py-1">
+          <ul id="ulmenu" class="menu-inner py-1" style="background:linear-gradient(90deg, rgba(2,0,36,1) 0%, rgba(0,31,69,1) 23%, rgba(0,132,111,1) 100%)">
             <!-- Page -->
-            <li class="menu-item ">
-              <a href="{{ route('dashboard') }}" class="menu-link">
-                <i class="menu-icon tf-icons ti ti-smart-home"></i>
-                <div data-i18n="Dashboard">Home</div>
+            <li class="menu-item text-white">
+              <a href="{{ route('dashboard') }}" class="menu-link " style="color:white">
+                <i class="menu-icon tf-icons ti ti-smart-home "></i>
+                <div>Home</div>
               </a>
             </li>
             <li class="menu-item ">
-              <a href="{{ route('superadmins.index') }}" class="menu-link">
-                <i class="menu-icon tf-icons ti ti-smart-home"></i>
-                <div >Super Admins</div>
+              <a href="{{ route('superadmins.index') }}" class="menu-link " style="color:white">
+                <i class="menu-icon tf-icons ti-crown ti"></i>
+                <div>Super Admins</div>
               </a>
             </li>
 
             <li class="menu-item">
-              <a href="{{ route('siteadmins.index') }}" class="menu-link">
-                <i class="menu-icon tf-icons ti ti-smart-home"></i>
-                <div >Site Admins</div>
+              <a href="{{ route('siteadmins.index') }}" class="menu-link " style="color:white">
+                <i class="menu-icon tf-icons ti ti-user " style="color:white"></i>
+                <div>Site Admins</div>
               </a>
             </li>
             <li class="menu-item">
-              <a href="{{ route('sites.index') }}" class="menu-link">
-                <i class="menu-icon tf-icons ti ti-smart-home"></i>
-                <div >Sites</div>
+              <a href="{{ route('sites.index') }}" class="menu-link " style="color:white">
+                <i class="menu-icon tf-icons ti-layout"></i>
+                <div>Sites</div>
               </a>
             </li>
-            <li class="menu-item">
-              <a href="{{ route('profile.edit') }}" class="menu-link">
-                <i class="menu-icon tf-icons ti ti-smart-home"></i>
-                <div >Profile ({{Auth()->user()->name}})</div>
-              </a>
-            </li>
-            <li class="menu-item p-5">
-                <form method="POST" action="{{route('logout')}}">
-                @csrf
-                <button type="submit"  >Logout</button>
-                </form>
-            </li>
+
           </ul>
+
           <script>
-            //code active for desktop menu
 document.addEventListener('DOMContentLoaded', function() {
     const menuItems = document.querySelectorAll('#ulmenu li a');
-  //  const contactbtn=document.getElementById("contactbtn");
-    let path=window.location.pathname;
-    path='http://localhost'+path;
-    console.log(path);
-    menuItems.forEach(item => {
-        console.log(item.getAttribute("href"))
-        if(item.getAttribute("href")===path ){
-            console.log('1st');
-            item.style.backgroundColor = "#8F85F3";
-            item.style.color = "#ffffff";
-        }
+    const icons = document.querySelectorAll('#ulmenu li a i'); // Use querySelectorAll for icons
 
+    let path = window.location.pathname;
+    path = 'http://localhost' + path;  // Adjust path for localhost
+
+    console.log(path);
+
+    // Active state for menu items (links)
+    menuItems.forEach(item => {
+        console.log(item.getAttribute("href"));
+        if (item.getAttribute("href") === path) {
+            console.log('Menu item matched');
+            item.style.backgroundColor = "#ffffff"; // Change background color
+            item.style.color = "#00846F"; // Change text color
+        }
     });
 
+    // Active state for icons
+    icons.forEach(icon => {
+        const parentLink = icon.closest('a');  // Find the closest <a> tag
+        if (parentLink && parentLink.getAttribute("href") === path) {
+
+            icon.style.color = "#00846F";  // Change icon color
+        }
+    });
 });
+
 
           </script>
         </aside>

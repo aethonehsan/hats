@@ -15,18 +15,20 @@ return new class extends Migration
             $table->id();
             $table->string('name')->nullable();
             $table->string('email')->unique();
-            $table->timestamp('email_verified_at')->nullable();
             $table->string('password')->nullable();
-            $table->boolean('status')->default(true); // true = active, false = disabled
+            $table->boolean('status')->default(true)->nullable(); // true = active, false = disabled
+
             $table->rememberToken();
             $table->timestamps();
         });
+
 
         Schema::create('password_reset_tokens', function (Blueprint $table) {
             $table->string('email')->primary();
             $table->string('token');
             $table->timestamp('created_at')->nullable();
         });
+
 
         Schema::create('sessions', function (Blueprint $table) {
             $table->string('id')->primary();
@@ -38,9 +40,7 @@ return new class extends Migration
         });
     }
 
-    /**
-     * Reverse the migrations.
-     */
+
     public function down(): void
     {
         Schema::dropIfExists('users');

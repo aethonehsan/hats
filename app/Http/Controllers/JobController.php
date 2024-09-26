@@ -12,10 +12,10 @@ class JobController extends Controller
 
     public function index()
     {
-        $runs=Job::all();
-        $runcategories= Department::all();
+        $jobs=Job::all();
+        $departments= Department::all();
 
-        return view('app.runs.index', compact('runs', 'runcategories'));
+        return view('app.jobs.index', compact('jobs', 'departments'));
     }
 
     /**
@@ -23,9 +23,9 @@ class JobController extends Controller
      */
     public function create()
     {
-        $runcategories=Department::all();
+        $departments=Department::all();
 
-        return view('app.runs.create', compact('runcategories'));
+        return view('app.jobs.create', compact('departments'));
     }
 
     public function store(Request $request)
@@ -34,21 +34,21 @@ class JobController extends Controller
         $targetCategory = Department::where('name', $request->input('category'))->first();
 
         if ($targetCategory) {
-            // Create a new Run
-            $run = new Job();
-            $run->name = $request->input('name');
-            $run->destination = $request->input('destination');
-            $run->price = $request->input('price');
-            $run->status = $request->input('status');
+            // Create a new Job
+            $job = new Job();
+            $job->name = $request->input('name');
+            $job->destination = $request->input('destination');
+            $job->price = $request->input('price');
+            $job->status = $request->input('status');
 
-            // Set the category_id for the run
-            $run->runcategory()->associate($targetCategory);
+            // Set the category_id for the Job
+            $job->department()->associate($targetCategory);
 
-            // Save the Run
-            $run->save();
+            // Save the Job
+            $job->save();
 
             // Optionally, you could return a response or redirect to another page
-            return redirect()->route('runs.index')->with('success', 'Run created successfully.');
+            return redirect()->route('jobs.index')->with('success', 'Job created successfully.');
         } else {
             // Handle the case where the category is not found
             return redirect()->back()->with('error', 'Category not found.');
@@ -67,9 +67,9 @@ class JobController extends Controller
 
     public function edit(string $id)
     {
-        $run=Job::find($id);
-        $runcategories=Department::all();
-        return view('app.runs.edit', compact('run' , 'runcategories'));
+        $job=Job::find($id);
+        $departments=Department::all();
+        return view('app.jobs.edit', compact('job' , 'departments'));
     }
 
     /**
@@ -79,22 +79,22 @@ class JobController extends Controller
     {
         $targetCategory = Department::where('name', $request->input('category'))->first();
 
-        $run=Job::find($id);
+        $job=Job::find($id);
         if ($targetCategory) {
-            // Create a new Run
-            $run->name = $request->input('name');
-            $run->destination = $request->input('destination');
-            $run->price = $request->input('price');
-            $run->status = $request->input('status');
+            // Create a new Job
+            $job->name = $request->input('name');
+            $job->destination = $request->input('destination');
+            $job->price = $request->input('price');
+            $job->status = $request->input('status');
 
-            // Set the category_id for the run
-            $run->runcategory()->associate($targetCategory);
+            // Set the category_id for the Job
+            $job->departments()->associate($targetCategory);
 
-            // Save the Run
-            $run->save();
+            // Save the Job
+            $job->save();
 
             // Optionally, you could return a response or redirect to another page
-            return redirect()->route('runs.index')->with('success', 'Run created successfully.');
+            return redirect()->route('jobs.index')->with('success', 'Job created successfully.');
         } else {
             // Handle the case where the category is not found
             return redirect()->back()->with('error', 'Category not found.');
@@ -110,7 +110,7 @@ class JobController extends Controller
     public function destroy(string $id)
     {
         Job::destroy($id);
-        return redirect()->route('runs.index');
+        return redirect()->route('jobs.index');
 
     }
 }

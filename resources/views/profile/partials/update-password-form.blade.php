@@ -62,7 +62,7 @@
         </div>
 
         <div class="d-flex justify-content-between align-items-center">
-            <button type="submit" class="btn btn-primary">{{ __('Save') }}</button>
+            <button type="submit" class="btn btn-primary custombtn">{{ __('Save') }}</button>
 
             @if (session('status') === 'password-updated')
                 <p

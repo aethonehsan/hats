@@ -1,4 +1,5 @@
 @extends('layouts.app')
+@section('title', 'Site Admin')
 @section('content')
 <div class="container">
     <h1>Edit</h1>
@@ -43,7 +44,7 @@
 
         <!-- Add more fields as needed -->
 
-        <button type="submit" class="btn btn-primary">Update</button>
+        <button type="submit" class="btn btn-primary custombtn">Update</button>
     </form>
     @if ($errors->any())
     <div class="alert alert-danger">

@@ -1,5 +1,5 @@
 @extends('layouts.app')
-
+@section('title', 'Site Admin')
 @section('content')
 
 
@@ -41,7 +41,7 @@
                         @endforeach
                     </tbody>
                 </table>
-                <a href="{{route('siteadmins.create')}}" class="btn btn-primary mt-3">Create</a>
+                <a href="{{route('siteadmins.create')}}" class="btn btn-primary mt-3 custombtn">Create</a>
             </div>
         </div>
     </div>

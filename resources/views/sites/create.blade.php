@@ -1,4 +1,5 @@
 @extends('layouts.app')
+@section('title', 'Site')
 @section('content')
 
 
@@ -37,7 +38,7 @@
         </div>
 
                     <!-- Submit Button -->
-                    <button type="submit" class="btn btn-primary">Add Site</button>
+                    <button type="submit" class="btn btn-primary custombtn">Add Site</button>
                 </form>
                 @if ($errors->any())
     <div class="alert alert-danger">

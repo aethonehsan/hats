@@ -5,20 +5,22 @@
   dir="ltr"
   data-theme="theme-default"
   data-assets-path="../../assets/"
-  data-template="vertical-menu-template-starter"
+
   data-style="light">
   <head>
+      <!-- data-template="vertical-menu-template-starter"    add this code after data-theme to show template customizer box -->
     <meta charset="utf-8" />
     <meta
       name="viewport"
       content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0" />
 
-    <title>Page 1 - Starter Kit | Vuexy - Bootstrap Admin Template</title>
+      <title> @yield( 'title' , 'HATS' ) </title>
+
 
     <meta name="description" content="" />
 
     <!-- Favicon -->
-    <link rel="icon" type="image/x-icon" href="../../assets/img/favicon/favicon.ico" />
+    <link rel="icon" type="image/x-icon" href="favicon.ico" />
 
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -34,6 +36,7 @@
     <!-- Core CSS -->
     <!-- Icons -->
     <link rel="stylesheet" href="../../assets/vendor/fonts/fontawesome.css" />
+    <link rel="stylesheet" href="{{asset('assets\css\customcss.css')}}" />
     <link rel="stylesheet" href="../../assets/vendor/fonts/tabler-icons.css" />
     <link rel="stylesheet" href="../../assets/vendor/fonts/flag-icons.css" />
 
